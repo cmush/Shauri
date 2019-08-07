@@ -7,7 +7,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
-import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,13 +27,8 @@ public class MainActivity extends AppCompatActivity {
         tvFortune = findViewById(R.id.tv_fortune);
         btnRefresh = findViewById(R.id.btn_refresh);
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(BuildConfig.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-
-        UshauriApi ushauriApi = retrofit.create(UshauriApi.class);
-        Call<Fortune> fortuneCall = ushauriApi.getFortune();
+        UshauriApiService ushauriApiService = UshauriClient.getInstance().getUshauriApiService();
+        Call<Fortune> fortuneCall = ushauriApiService.getFortune();
         fortuneCall.enqueue(new Callback<Fortune>() {
             @Override
             public void onResponse(Call<Fortune> call, Response<Fortune> response) {
