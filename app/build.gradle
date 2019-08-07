@@ -30,6 +30,8 @@ android {
             versionNameSuffix "-debug"
         }
     }
+    // https://www.journaldev.com/21533/android-build-types-product-flavors
+    // https://medium.com/@juhi.matta/how-to-set-up-build-environment-in-android-ac06f74df51a
     productFlavors {
         development {
             getProps('./config/development.props').each { p ->
