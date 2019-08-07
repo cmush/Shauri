@@ -53,17 +53,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String fortuneStr = stringBuilder.toString();
                     tvFortune.setText(fortuneStr);
-                    return;
                 } else {
                     tvFortune.setText(getResources().getString(R.string.prompt_refresh));
-                    Log.e("response_unsuccessful", String.valueOf(response.errorBody()));
                 }
             }
 
             @Override
             public void onFailure(Call<Fortune> call, Throwable t) {
                 tvFortune.setText(getResources().getString(R.string.prompt_refresh));
-                Log.e("onFailure", t.getMessage());
             }
         });
     }
