@@ -4,6 +4,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
+import android.widget.TextView;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -12,11 +16,16 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
+    TextView tvFortune;
+    Button btnRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvFortune = findViewById(R.id.tv_fortune);
+        btnRefresh = findViewById(R.id.btn_refresh);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
@@ -28,15 +37,24 @@ public class MainActivity extends AppCompatActivity {
         fortuneCall.enqueue(new Callback<Fortune>() {
             @Override
             public void onResponse(Call<Fortune> call, Response<Fortune> response) {
-                if (!response.isSuccessful()) {
-                    Log.d("onResponse", String.valueOf(response.body().getFortune().get(0)));
+                Log.d("response code", String.valueOf(response.code()));
+                Log.d("response", String.valueOf(response.body().getFortune().toString()));
+                if (response.isSuccessful()) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    List<String> fortunes = response.body().getFortune();
+                    for (String f : fortunes) {
+                        stringBuilder = stringBuilder.append(f);
+                    }
+                    String fortuneStr = stringBuilder.toString();
+                    tvFortune.setText(fortuneStr);
                     return;
                 }
             }
 
             @Override
             public void onFailure(Call<Fortune> call, Throwable t) {
-                Log.d("onResponse", t.getMessage());
+                tvFortune.setText(getResources().getString(R.string.prompt_refresh));
+                Log.e("onFailure", t.getMessage());
             }
         });
     }
