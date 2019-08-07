@@ -7,6 +7,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.List;
 
 import retrofit2.Call;
@@ -48,6 +49,9 @@ public class MainActivity extends AppCompatActivity {
                     String fortuneStr = stringBuilder.toString();
                     tvFortune.setText(fortuneStr);
                     return;
+                } else {
+                    tvFortune.setText(getResources().getString(R.string.prompt_refresh));
+                    Log.e("response_unsuccessful", String.valueOf(response.errorBody()));
                 }
             }
 
