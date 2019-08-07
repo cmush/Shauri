@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -12,8 +13,6 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
     TextView tvFortune;
@@ -27,6 +26,18 @@ public class MainActivity extends AppCompatActivity {
         tvFortune = findViewById(R.id.tv_fortune);
         btnRefresh = findViewById(R.id.btn_refresh);
 
+        loadAndDisplayFortune();
+
+        btnRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                tvFortune.setText(getResources().getString(R.string.loading));
+                loadAndDisplayFortune();
+            }
+        });
+    }
+
+    private void loadAndDisplayFortune() {
         UshauriApiService ushauriApiService = UshauriClient.getInstance().getUshauriApiService();
         Call<Fortune> fortuneCall = ushauriApiService.getFortune();
         fortuneCall.enqueue(new Callback<Fortune>() {
