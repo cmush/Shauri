@@ -45,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<Fortune> call, Response<Fortune> response) {
                 Log.d("response code", String.valueOf(response.code()));
                 Log.d("response", String.valueOf(response.body().getFortune().toString()));
-                if (response.isSuccessful()) {
+
+                if (response.code() >= 400 && response.code() < 599) {
+                    tvFortune.setText(getResources().getString(R.string.prompt_refresh));
+                } else if (response.isSuccessful()) {
                     StringBuilder stringBuilder = new StringBuilder();
                     List<String> fortunes = response.body().getFortune();
                     for (String f : fortunes) {
@@ -53,8 +56,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     String fortuneStr = stringBuilder.toString();
                     tvFortune.setText(fortuneStr);
-                } else {
-                    tvFortune.setText(getResources().getString(R.string.prompt_refresh));
                 }
             }
 
